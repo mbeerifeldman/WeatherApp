@@ -1,0 +1,104 @@
+
+header {
+  position: realtive;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  
+}
+header > img{
+  height: 150px;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  object-fit: cover;
+
+}
+header > p {
+  position: absolute; 
+  top: 0%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  color: rgb(7, 5, 24);
+  font-size: 35px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+
+}
+
+.form {
+  display: flex;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+
+}
+
+.form > input {
+  font-family: VT323, monospace;
+  font-size: 30px;
+  letter-spacing: 1.5px;
+  margin: 10px 5px;
+  width: 50%;
+}
+
+.form > button {
+  margin: 0;
+}
+
+.basicInfo {
+  border: 5px solid rgb(73, 178, 222);
+  margin: 4px;
+  text-align: left;
+  padding: 10px;
+  background:rgb(191, 229, 236);
+  border-radius: 8px;
+
+}
+.forecastBox{
+  margin-top: 10px;
+  display: inline-block;
+  border:2px solid rgb(73, 178, 222);
+  margin: 4px;
+  padding: 20px;
+  width: 150px;
+  height: 200px;
+  border-radius: 4px;
+}
+.nav {
+  display: inline-block;
+  border:2px solid rgb(73, 178, 222);
+  margin: 4px;
+  width: 90px;
+  height: 25px;
+  border-radius: 4px;
+  position: relative;
+  top: -60px;
+  left: 750px;
+}
+
+.icons>img{
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.active-link {
+  font-weight: bold;
+}
+.selected {
+  background-color: #007bff;
+}
+
+.checkbox{
+  display: inline-block;
+  margin: 4px;
+  position: relative;
+  bottom: 530px;
+  left: 870px;
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+}
