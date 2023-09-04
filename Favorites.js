@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 function Favorites(props) {
     const location = useLocation();
-    console.log(props)
+    //console.log(props)
 
     return (
         <div>
@@ -14,7 +14,7 @@ function Favorites(props) {
                         {props.data && props.data.map((forecast, index) => (
                             <div key = {index} className='forecastBox'>
                                 <h4>City: {forecast.cityName}</h4>
-                                <h3>{forecast.weatherIcon}</h3>
+                                <p>Temperature: {forecast.current.Temperature.Metric.Value} {forecast.current.Temperature.Metric.Unit}</p>
                                 
                             </div>
                     ))}

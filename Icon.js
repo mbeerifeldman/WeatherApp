@@ -52,7 +52,7 @@ function Icon(props){
                     alt='Windy Icon'
                 />
             )}
-            {(props.datas === 'Clear' || props.datas === 'Mostly clear' || props.datas === 'Partly cloudy' || props.datas === 'Intermittent clouds'|| props.datas === 'Hazy moonlight' || props.datas === 'Freezing rain' || props.datas === 'Rain and snow') && (
+            {(props.datas === 'Clear' || props.datas === 'Mostly clear' || props.datas === 'Partly cloudy' || props.datas === 'Hazy moonlight' || props.datas === 'Freezing rain' || props.datas === 'Rain and snow') && (
                 <img
                     src='https://cdn-icons-png.flaticon.com/512/180/180700.png'
                     alt='Moon Icon'
