@@ -95,8 +95,8 @@ header > p {
 .checkbox{
   display: inline-block;
   margin: 4px;
-  position: relative;
-  bottom: 530px;
+  position: fixed;
+  bottom: 330px;
   left: 870px;
   font-size: 20px;
   cursor: pointer;

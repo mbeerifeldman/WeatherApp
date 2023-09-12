@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useReducer} from 'react'
 import Header from './Header'
 import Main from './Main'
 import NavBar from './NavBar'
@@ -11,13 +11,23 @@ const apiKey = '2e6pcsGJA2sCMvXUcPHOD3ER3RQnKSSa'
 
 
 function App() {
+    const reducer = (state, action) =>{
+        switch (action.type){
+            case 'FAVE_TOGGLE' : 
+                return !state
+            default: 
+                return state  
+        }
+    }
+
+
     const [searchBar, setSearch] = useState('')
     const [cityName, setName] = useState('')
     const [cityKey, setKey] = useState('')
     const[current, setCurrent] = useState('')
     const[fiveDay, setDay] = useState('')
     const[favorites, setFavorites] = useState([])
-    const[isFavorite, setIsFavorite] = useState(false)
+    const[isFavorite, dispatchIsFavorite] = useReducer(reducer, false)
 
     useEffect(() => {
         const storedFavorites = localStorage.getItem('favorites')
@@ -27,7 +37,7 @@ function App() {
 
         fetchCity('tel aviv', () => {
             if (storedFavorites.includes(cityName)) {
-                setIsFavorite(true)
+                dispatchIsFavorite({type : 'FAVE_TOGGLE'})
             }
         })
 
@@ -53,7 +63,7 @@ function App() {
             ]
         }
         localStorage.setItem('favorites', JSON.stringify(newFavorites))
-        setIsFavorite(!isFavorite)
+        dispatchIsFavorite({type : 'FAVE_TOGGLE'})
         setFavorites(newFavorites)
             
 
@@ -69,7 +79,7 @@ function App() {
                 fetchCurrentConditions(response.data[0].Key) //fix
                 fetchFiveDay(response.data[0].Key)
                 const isCityFavorite = favorites.includes(cityName);
-                setIsFavorite(isCityFavorite)
+                dispatchIsFavorite({type : 'FAVE_TOGGLE'})
             
             })   
     }
@@ -104,7 +114,7 @@ function App() {
     }
     const clearFavorites = () => {
         setFavorites([])
-        setIsFavorite(false)
+        dispatchIsFavorite({type : 'FAVE_TOGGLE'})
         localStorage.removeItem('favorites')
     }
     return (
