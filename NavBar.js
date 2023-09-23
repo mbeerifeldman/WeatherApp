@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 function NavBar() {
     const [selectedButton, setSelectedButton] = useState('Home')
 
     const handleButtonClick = (buttonName) => {
-        setSelectedButton(buttonName);
-    };
+        setSelectedButton(buttonName)
+    }
 
     return (
         <div>
@@ -28,7 +28,7 @@ function NavBar() {
 </Link>
 
         </div>
-    );
+    )
 }
 
 export default NavBar;
