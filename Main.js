@@ -21,7 +21,7 @@ function Main(props) {
             <div>
                 <div className='basicInfo'>
                     <div className = 'current'>
-                        <h1>{props.data.cityName}</h1>
+                        <h1>Current City: {props.data.cityName}</h1>
                         <h3>Date: {dateTime.slice(0, 10)}</h3>
                         <h3>Time: {dateTime.slice(11, 19)}</h3>
                         <h3>Current Weather: {props.data.current.WeatherText}</h3>
