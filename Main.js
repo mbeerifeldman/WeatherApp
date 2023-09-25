@@ -1,14 +1,19 @@
 import React from 'react';
 import Icon from './Icon'
+import {useSelector} from 'react-redux'
 
 
 function Main(props) {
-    const dateTime = props.data.current ? props.data.current.LocalObservationDateTime : '';
-    const temperature = props.data.current ? props.data.current.Temperature : null;
+    const cityName = useSelector((state) => state.fetch.cityName)
+    const current = useSelector((state) => state.fetch.current)
+
+    const dateTime = props.data.current ? props.data.current.LocalObservationDateTime : ''
+    const temperature = current ? current.Temperature : null
+
 
     return (
         <div>
-            <form className='form' onSubmit={props.handleSubmit}>
+             <form className='form' onSubmit={props.handleSubmit}>
                 <input
                     type='text'
                     placeholder='Enter City'
@@ -21,10 +26,10 @@ function Main(props) {
             <div>
                 <div className='basicInfo'>
                     <div className = 'current'>
-                        <h1>Current City: {props.data.cityName}</h1>
+                        <h1>Current City: {cityName}</h1>
                         <h3>Date: {dateTime.slice(0, 10)}</h3>
                         <h3>Time: {dateTime.slice(11, 19)}</h3>
-                        <h3>Current Weather: {props.data.current.WeatherText}</h3>
+                        <h3>Current Weather: {current.WeatherText}</h3>
                         {temperature && (
                             <h3>
                                 Temperature: {temperature.Metric.Value} {temperature.Metric.Unit}
@@ -47,7 +52,7 @@ function Main(props) {
                     </div>
                 </div>
                 
-            </div>
+            </div> 
          
         </div>
     );

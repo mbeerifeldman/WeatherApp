@@ -1,29 +1,33 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch, Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import axios from 'axios'
 
-import { setFavorites } from './redux/actions'
+import { setFavorites, setSearch, setName, setKey, setCurrent, setFive } from './redux/actions'
 import Header from './Header'
 import Main from './Main'
 import NavBar from './NavBar'
 import Favorites from './Favorites'
 import GMaps from './GMaps'
+import  API  from './API'
 import store from './redux/configureStore'
 
-const apiKey = '2e6pcsGJA2sCMvXUcPHOD3ER3RQnKSSa'
-
 function App() {
-    const isFavorite = useSelector((state) => state.isFavorite)
-    const favorites = useSelector((state) => state.favorites)
+    const isFavorite = useSelector((state) => state.isFavorite.isFavorite)
+    const error = useSelector((state) => state.isFavorite.error)
+    const favorites = useSelector((state) => state.favorites.favorites)
+    const searchBar = useSelector((state) => state.fetch.searcBar)
+    const cityName = useSelector((state) => state.fetch.cityName)
+    const current = useSelector((state) => state.fetch.current)
+    const cityKey = useSelector((state) => state.fetch.cityKey)
+    const fiveDay = useSelector((state) => state.fetch.fiveDay)
+    
     const dispatch = useDispatch()
     let newFavorites
-
-    const [searchBar, setSearch] = useState('')
-    const [cityName, setName] = useState('')
-    const [cityKey, setKey] = useState('')
-    const [current, setCurrent] = useState('')
-    const [fiveDay, setDay] = useState('')
+    const {
+        fetchCity,
+        fetchCurrentConditions,
+        fetchFiveDay,
+      } = API()
 
     useEffect(() => {
         fetchCity('tel aviv')
@@ -59,50 +63,24 @@ function App() {
         
     
         localStorage.setItem('favorites', JSON.stringify(newFavorites))
-        console.log(localStorage)
         dispatch(setFavorites(newFavorites))
     }
 
-    const fetchCity = (location) => {
-        const bases = 'http://dataservice.accuweather.com/locations/v1/cities/autocomplete';
-        const querys = `?apikey=${apiKey}&q=${location} `;
-        axios.get(bases + querys).then((response) => {
-        setSearch('');
-        setName(response.data[0].LocalizedName);
-        setKey(response.data[0].Key);
-        fetchCurrentConditions(response.data[0].Key);
-        fetchFiveDay(response.data[0].Key);
-        })
-    }
-
-    const fetchCurrentConditions = (key) => {
-        const base = 'http://dataservice.accuweather.com/currentconditions/v1/';
-        const query = `${key}?apikey=${apiKey}`
-        axios.get(base + query).then((response) => {
-        setCurrent(response.data[0])
-        })
-    }
-
-    const fetchFiveDay = (key) => {
-        const based = 'http://dataservice.accuweather.com/forecasts/v1/daily/5day/';
-        const queryed = `${key}?apikey=${apiKey}&metric=${true}`;
-        axios.get(based + queryed).then((response) => {
-        setDay(response.data.DailyForecasts);
-        });
-    };
-
     const handleInputChange = (event) => {
-        setSearch(event.target.value);
-    };
+        dispatch(setSearch(event.target.value))
+    }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         const submittedCity = searchBar
-
-
-        setName(submittedCity)
-        fetchCity(submittedCity)
-    };
+          const cityInfo = await fetchCity(submittedCity);
+          dispatch(setName(cityInfo.LocalizedName))
+          dispatch(setKey(cityInfo.Key))
+          const currentConditions = await fetchCurrentConditions(cityInfo.Key);
+          dispatch(setCurrent(currentConditions))
+          const fiveDay = await fetchFiveDay(cityInfo.Key);
+          dispatch(setFive(fiveDay))
+      }
 
     const clearFavorites = () => {
         dispatch(setFavorites([]))
@@ -114,8 +92,8 @@ function App() {
             <BrowserRouter>
             <Routes>
                 <Route
-                path="/"
-                element={
+                    path="/"
+                    element={
                     <div>
                     <Header />
                     <NavBar />
@@ -130,7 +108,7 @@ function App() {
                         fiveDay,
                         }}
                     />
-
+                    {error && <p>Error: An error occurred while fetching data.</p>}
                     <label className="checkbox">
                         Favorite
                         <input
@@ -160,6 +138,7 @@ function App() {
                             <Header />
                             <NavBar />
                             <GMaps />
+                            {error && <p>Error: An error occurred while fetching data.</p>}
                         </div>
                     }
                 /> 
@@ -170,3 +149,4 @@ function App() {
 }
 
 export default App;
+
