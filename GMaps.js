@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLat, setLng } from './redux/actions';
 import axios from 'axios';
 
 
@@ -11,39 +10,41 @@ const containerStyle = {
   height: '550px',
 };
 
-const center = {
-  lat: -34.745,
-  lng: -38.523,
-};
 
 function GMaps() {
-  const city = useSelector((state) => state.city);
-  
+  const city = useSelector((state) => state.favorites.city)
 
   const gkey = 'AIzaSyDRKJAqcMe_w5DKJzw5G4b8ScX9uVKeD4k'; 
   const dispatch = useDispatch();
   const location = useLocation();
-  const [actualPosition, setActualPosition] = useState(center)
+  const [actualPosition, setActualPosition] = useState(0)
  
 
   useEffect(() => {
     if (location.pathname === `/map/${city}`) {
-      LatLong(gkey);
+      LatLong(gkey)
+      console.log(city)
     }
+    else{console.log('fail')}
   }, []);
 
   const LatLong = (key) => {
-    if (city) {
-      const base = 'https://maps.googleapis.com/maps/api/geocode/json?address='
-      const query = `${city}&key=${key}`
-      axios.get(base + query).then((response) => {
-        const { lat, lng } = response.data.results[0].geometry.location
-        dispatch(setLat(lat));
-        dispatch(setLng(lng));
-        setActualPosition({ lat, lng });
-      });
-    }
-  };
+    try{
+      if (city) {
+        const base = 'https://maps.googleapis.com/maps/api/geocode/json?address='
+        const query = `${city}&key=${key}`
+        axios.get(base + query).then((response) => {
+          
+          const { lat, lng } = response.data.results[0].geometry.location
+      
+          dispatch({ type: 'SET_LAT', payload: lat })
+          dispatch({ type: 'SET_LNG', payload: lng })
+          setActualPosition({ lat, lng })
+        })
+      }}
+  catch(error){
+    dispatch({type: 'ERROR_TOGGLE', payload: true})
+  }}
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
